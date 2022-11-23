@@ -22,7 +22,6 @@ public class ConsumerServiceImpl implements ConsumerService {
     @RabbitListener(queues = TEXT_MESSAGE_UPDATE)
     public void consumeTextMessageUpdates(Update update) {
         log.debug("NODE: Text message is received");
-
         mainService.processTextMessage(update);
     }
 
@@ -30,11 +29,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     public void consumeDocMessageUpdates(Update update) {
         log.debug("NODE: Doc message is received");
+        mainService.processDocMessage(update);
     }
 
     @Override
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
     public void consumePhotoMessageUpdates(Update update) {
         log.debug("NODE: Photo message is received");
+        mainService.processPhotoMessage(update);
     }
 }
