@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.share.file.dao.AppUserDAO;
 import ru.share.file.dao.RawDataDAO;
 import ru.share.file.entity.AppDocument;
+import ru.share.file.entity.AppPhoto;
 import ru.share.file.entity.AppUser;
 import ru.share.file.entity.RawData;
 import ru.share.file.exceptions.UploadFileException;
@@ -80,6 +81,28 @@ public class MainServiceImpl implements MainService {
         }
     }
 
+    @Override
+    public void processPhotoMessage(Update update) {
+        saveRawData(update);
+        var appUser = findOrSaveAppUser(update);
+        var chatId = update.getMessage().getChatId();
+        if (isNotAllowToSendContent(chatId, appUser)) {
+            return;
+        }
+
+        try {
+            AppPhoto photo = fileService.processPhoto(update.getMessage());
+            //TODO: добавить генерацию ссылки для скачивания фото.
+            var answer = "Фото успешно загружено! " +
+                    "Ссылка для скачивания: http://test.ru/get-photo/123";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex);
+            String error = "К сожалению, загрузить фото не удалось. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
+    }
+
     private boolean isNotAllowToSendContent(Long chatId, AppUser appUser) {
         var userState = appUser.getState();
         if (!appUser.getIsActive()) {
@@ -93,20 +116,6 @@ public class MainServiceImpl implements MainService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void processPhotoMessage(Update update) {
-        saveRawData(update);
-        var appUser = findOrSaveAppUser(update);
-        var chatId = update.getMessage().getChatId();
-        if (isNotAllowToSendContent(chatId, appUser)) {
-            return;
-        }
-        //TODO: добавить сохранение фото.
-        var answer = "Фото успешно загружено! " +
-                "Ссылка для скачивания: http://test.ru/get-photo/123";
-        sendAnswer(answer, chatId);
     }
 
     private void sendAnswer(String output, Long chatId) {
