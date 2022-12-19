@@ -15,6 +15,7 @@ import ru.share.file.exceptions.UploadFileException;
 import ru.share.file.service.FileService;
 import ru.share.file.service.MainService;
 import ru.share.file.service.ProducerService;
+import ru.share.file.service.enums.LinkType;
 import ru.share.file.service.enums.ServiceCommand;
 
 import static ru.share.file.entity.enums.UserState.BASIC_STATE;
@@ -70,9 +71,9 @@ public class MainServiceImpl implements MainService {
         }
         try {
             AppDocument doc = fileService.processDoc(update.getMessage());
-            //TODO: добавить генерацию ссылки для скачивания документа.
+            String link = fileService.generateLink(doc.getId(), LinkType.GET_DOC);
             var answer = "Документ успешно загружен! " +
-                    "Ссылка для скачивания: http://test.ru/get-doc/123";
+                    "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
             log.error(ex);
@@ -92,9 +93,9 @@ public class MainServiceImpl implements MainService {
 
         try {
             AppPhoto photo = fileService.processPhoto(update.getMessage());
-            //TODO: добавить генерацию ссылки для скачивания фото.
+            String link = fileService.generateLink(photo.getId(), LinkType.GET_PHOTO);
             var answer = "Фото успешно загружено! " +
-                    "Ссылка для скачивания: http://test.ru/get-photo/123";
+                    "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
             log.error(ex);
