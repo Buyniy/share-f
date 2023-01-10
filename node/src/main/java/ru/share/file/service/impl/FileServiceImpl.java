@@ -18,7 +18,7 @@ import ru.share.file.entity.BinaryContent;
 import ru.share.file.exceptions.UploadFileException;
 import ru.share.file.service.FileService;
 import ru.share.file.service.enums.LinkType;
-import ru.share.utils.CryptoTool;
+import ru.share.file.utils.CryptoTool;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -10,7 +10,7 @@ import ru.share.file.entity.AppDocument;
 import ru.share.file.entity.AppPhoto;
 import ru.share.file.entity.BinaryContent;
 import ru.share.file.service.FileService;
-import ru.share.utils.CryptoTool;
+import ru.share.file.utils.CryptoTool;
 
 import java.io.File;
 import java.io.IOException;

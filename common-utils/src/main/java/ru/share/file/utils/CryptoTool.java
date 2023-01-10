@@ -1,4 +1,4 @@
-package ru.share.utils;
+package ru.share.file.utils;
 
 import org.hashids.Hashids;
 
